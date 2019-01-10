@@ -1,0 +1,60 @@
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
+
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+lower_case_table_names=1
+max_allowed_packet = 200M
+
+#master conf
+server-id=131
+#开启慢查询日志功能
+slow_query_log=TRUE
+slow_query_log_file=/var/lib/mysql/slow_query_log.txt
+long_query_time=2
+lower_case_table_names=1
+max_allowed_packet = 200M
+#slave conf
+server-id=2
+log-bin=mysql-bin
+log-bin-index=mysql-bin.index
+binlog-format=row
+binlog-do-db = softcentric
+binlog-ignore-db = mysql
+binlog-ignore-db=information_schema
+binlog-ignore-db=performance_schema
+log-slave-updates
+relay-log=slave-relay-bin
+relay-log-index=slave-relay-bin.index
+auto_increment_offset = 2
+auto_increment_increment = 1
+#半同步复制
+rpl_semi_sync_master_enabled=1
+rpl_semi_sync_slave_enabled=1
+#GTID配置
+#log-bin=master-bin
+#log-slave-updates
+gtid-mode = on
+enforce-gtid-consistency
